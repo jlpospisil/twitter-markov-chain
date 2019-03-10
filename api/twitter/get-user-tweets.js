@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
+const twitterDevEnvironment = process.env.TWITTER_DEV_ENV;
 const dir = path.resolve(__dirname);
 const cacheDir = path.join(dir, '..', 'cache');
 const weekInMs = 7 * 24 * 60 * 60 * 1000;
@@ -19,24 +20,32 @@ const formatTweet = (tweet) => {
   return text;
 };
 
-const getTweets = (twitter, id) => {
+const processTwitterData = (data) => {
+  const { results: tweets } = data;
+  return tweets ? tweets.map(formatTweet) : null;
+};
+
+const getUserTweets = (twitter, id) => new Promise((resolve, reject) => {
   const cacheFile = path.join(cacheDir, `${id}.json`);
-  let tweets = null;
+  let data = {};
 
   // If the cached results exist and are less than a week old, use them
   // Otherwise, retrieve the tweets for the given user from twitter
   if (fs.existsSync(cacheFile) && getFileAgeInWeeks(cacheFile) === 0) {
-    ({ tweets } = JSON.parse(fs.readFileSync(cacheFile).toString()) || {});
+    data = JSON.parse(fs.readFileSync(cacheFile).toString());
+    resolve(processTwitterData(data));
   } else {
-    twitter.get('search/tweets', { q: `from:@${id}` }, (err, { statuses } = {}) => {
-      if (statuses && Array.isArray(statuses)) {
-        tweets = statuses;
-        fs.writeFileSync(cacheFile, JSON.stringify({ tweets }, null, 2));
+    const url = `/tweets/search/30day/${twitterDevEnvironment}.json`;
+    twitter.get(url, { query: `from:${id}` }, (err, tweetData, response) => {
+      data = tweetData;
+      if (response.statusCode === 200) {
+        fs.writeFileSync(cacheFile, JSON.stringify(data, null, 2));
+        resolve(processTwitterData(data));
+      } else {
+        reject(err);
       }
     });
   }
+});
 
-  return tweets ? tweets.map(formatTweet) : null;
-};
-
-module.exports = getTweets;
+module.exports = getUserTweets;
