@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "npx concurrently --kill-others \"npm run serve:api\" \"npm run serve:app\"",
+    "serve:api": "node api/index.js 4000",
+    "serve:app": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit"
@@ -23,10 +25,13 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^23.6.0",
+    "dotenv": "^6.2.0",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0",
+    "express": "^4.16.4",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.1.0",
+    "twitter": "^1.7.1",
     "vue-template-compiler": "^2.5.21"
   }
 }
