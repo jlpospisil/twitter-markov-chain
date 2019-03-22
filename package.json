@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@cdpjs/vue-components": "^0.10.0",
-    "compromise": "^11.13.2",
+    "axios": "^0.18.0",
     "vue": "^2.6.6",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
