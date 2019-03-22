@@ -1,18 +1,53 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="container">
+    <div class="row mb-5">
+      <div class="col-auto">
+        <text-input label="User ID" v-model="userId" />
+      </div>
+    </div>
+
+    <div class="row border my-2" v-for="tweet in tweets">
+      <div
+        class="col p-2"
+        :class="{
+          'text-success': tweet.real,
+          'text-danger': !tweet.real,
+        }"
+      >
+        {{ tweet.text }}
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue';
+import { mapState, mapActions } from 'vuex';
+import { TextInput } from '@cdpjs/vue-components';
 
 export default {
   name: 'home',
   components: {
-    HelloWorld,
+    TextInput,
+  },
+  data() {
+    return {
+      userId: null,
+    };
+  },
+  computed: {
+    ...mapState([
+      'tweets',
+    ]),
+  },
+  methods: {
+    ...mapActions([
+      'generateTweets',
+      'getTweetsFromTwitter',
+    ]),
+  },
+  mounted() {
+    const { getTweetsFromTwitter, generateTweets } = this;
+    getTweetsFromTwitter().then(generateTweets);
   },
 };
 </script>
