@@ -19,7 +19,7 @@ const port = args.length > 0 ? args[0] : 4000;
 // Add api routes
 app.get('/tweets/:id', async (req, res) => {
   let { id } = req.params;
-  id = id.replace(/^@/, '');
+  id = id.replace(/^@/, '').toLowerCase();
   const tweets = await getUserTweets(twitter, id);
   return res.send({ tweets });
 });

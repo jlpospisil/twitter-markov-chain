@@ -6,28 +6,26 @@
       </div>
     </div>
 
-    <div class="row border my-2" v-for="tweet in tweets">
-      <div
-        class="col p-2"
-        :class="{
-          'text-success': tweet.real,
-          'text-danger': !tweet.real,
-        }"
-      >
-        {{ tweet.text }}
-      </div>
-    </div>
+    <tweet
+      :key="`tweet-${index}`"
+      v-for="(tweet, index) in tweets"
+      :text="tweet.text"
+      :selected="!!tweet.selected"
+      @click="toggleSelected(index)"
+    />
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex';
 import { TextInput } from '@cdpjs/vue-components';
+import Tweet from '@/components/Tweet.vue';
 
 export default {
   name: 'home',
   components: {
     TextInput,
+    Tweet,
   },
   data() {
     return {
@@ -43,6 +41,7 @@ export default {
     ...mapActions([
       'generateTweets',
       'getTweetsFromTwitter',
+      'toggleSelected',
     ]),
   },
   mounted() {
