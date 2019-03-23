@@ -14,7 +14,7 @@ const formatTweet = (tweet) => {
   const { urls = [] } = entities;
 
   urls.forEach((url) => {
-    text = text.replace(url.url, url.expanded_url);
+    text = text.replace(url.url, `<a href="${url.expanded_url}">${url.url}</a>`);
   });
 
   return text;

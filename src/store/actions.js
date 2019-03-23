@@ -58,4 +58,8 @@ export default {
     // Update vuex store
     commit('UPDATE_TWEETS', tweets);
   },
+
+  toggleSelected({ commit }, index) {
+    commit('TOGGLE_SELECTED', index);
+  },
 };
