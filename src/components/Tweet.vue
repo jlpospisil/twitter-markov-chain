@@ -3,7 +3,7 @@
       <div class="col">
         <div>
           <strong>
-            User Name
+            {{ userName }}
           </strong>
           <span class="text-muted">
             {{ userId | twitterId }}
@@ -40,6 +40,7 @@ export default {
   computed: {
     ...mapState([
       'userId',
+      'userName',
     ]),
   },
   filters: {

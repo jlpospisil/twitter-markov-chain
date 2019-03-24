@@ -10,6 +10,7 @@ const rootDir = path.join(apiDir, '..');
 // Import requirements that depend on environment variables
 const twitter = require('./twitter/client');
 const getUserTweets = require('./twitter/get-user-tweets');
+const getUserName = require('./twitter/get-user-name');
 
 // Setup express app
 const app = express();
@@ -21,7 +22,9 @@ app.get('/tweets/:id', async (req, res) => {
   let { id } = req.params;
   id = id.replace(/^@/, '').toLowerCase();
   const tweets = await getUserTweets(twitter, id);
-  return res.send({ tweets });
+  const userName = await getUserName(twitter, id);
+
+  return res.send({ userName, tweets });
 });
 
 // Start app

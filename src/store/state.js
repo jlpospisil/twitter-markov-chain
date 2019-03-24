@@ -3,4 +3,5 @@ export default {
   twitterTweetWords: [],
   tweets: [],
   userId: '@realDonaldTrump',
+  userName: null,
 };

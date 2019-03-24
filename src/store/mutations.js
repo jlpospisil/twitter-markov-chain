@@ -19,4 +19,8 @@ export default {
   UPDATE_TWEETS(state, tweets = []) {
     Vue.set(state, 'tweets', tweets);
   },
+
+  UPDATE_USER_NAME(state, userName) {
+    Vue.set(state, 'userName', userName);
+  },
 };

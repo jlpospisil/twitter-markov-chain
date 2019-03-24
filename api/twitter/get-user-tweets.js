@@ -25,7 +25,7 @@ const processTwitterData = (data) => {
   return tweets ? tweets.map(formatTweet) : null;
 };
 
-const getUserTweets = (twitter, id) => new Promise((resolve, reject) => {
+const getUserTweets = (twitter, id, processTweets = true) => new Promise((resolve, reject) => {
   const cacheFile = path.join(cacheDir, `${id}.json`);
   let data = {};
 
@@ -33,14 +33,14 @@ const getUserTweets = (twitter, id) => new Promise((resolve, reject) => {
   // Otherwise, retrieve the tweets for the given user from twitter
   if (fs.existsSync(cacheFile) && getFileAgeInWeeks(cacheFile) === 0) {
     data = JSON.parse(fs.readFileSync(cacheFile).toString());
-    resolve(processTwitterData(data));
+    resolve(processTweets ? processTwitterData(data) : data);
   } else {
     const url = `/tweets/search/30day/${twitterDevEnvironment}.json`;
     twitter.get(url, { query: `from:${id}` }, (err, tweetData, response) => {
       data = tweetData;
       if (response.statusCode === 200) {
         fs.writeFileSync(cacheFile, JSON.stringify(data, null, 2));
-        resolve(processTwitterData(data));
+        resolve(processTweets ? processTwitterData(data) : data);
       } else {
         reject(err);
       }

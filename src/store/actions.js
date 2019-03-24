@@ -6,8 +6,9 @@ export default {
 
     return axios.get(`/tweets/${userId}`).then((response) => {
       const { data = {} } = response;
-      const { tweets } = data;
+      const { tweets, userName } = data;
       commit('UPDATE_TWITTER_TWEETS', tweets);
+      commit('UPDATE_USER_NAME', userName);
     });
   },
 
