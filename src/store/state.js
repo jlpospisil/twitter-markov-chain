@@ -1,7 +1,8 @@
 export default {
+  reveal: false,
   twitterTweets: [],
   twitterTweetWords: [],
   tweets: [],
-  userId: '@realDonaldTrump',
+  userId: null,
   userName: null,
 };

@@ -1,6 +1,11 @@
 import Vue from 'vue';
 
 export default {
+  TOGGLE_REVEAL(state) {
+    const { reveal } = state;
+    Vue.set(state, 'reveal', !reveal);
+  },
+
   TOGGLE_SELECTED(state, index) {
     const { tweets } = state;
     if (typeof tweets[index] !== 'undefined') {
@@ -18,6 +23,10 @@ export default {
 
   UPDATE_TWEETS(state, tweets = []) {
     Vue.set(state, 'tweets', tweets);
+  },
+
+  UPDATE_USER_ID(state, userId) {
+    Vue.set(state, 'userId', userId);
   },
 
   UPDATE_USER_NAME(state, userName) {

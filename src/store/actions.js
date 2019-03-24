@@ -60,7 +60,15 @@ export default {
     commit('UPDATE_TWEETS', tweets);
   },
 
+  toggleReveal({ commit }) {
+    commit('TOGGLE_REVEAL');
+  },
+
   toggleSelected({ commit }, index) {
     commit('TOGGLE_SELECTED', index);
+  },
+
+  updateUserId({ commit }, userId) {
+    commit('UPDATE_USER_ID', userId);
   },
 };

@@ -8,6 +8,13 @@
           <span class="text-muted">
             {{ userId | twitterId }}
           </span>
+          <span
+            class="badge float-right pt-1"
+            :class="`badge-${real ? 'primary' : 'danger'}`"
+            v-show="reveal"
+          >
+            {{ real ? 'Real' : 'Fake' }}
+          </span>
         </div>
 
         <div class="p-1" v-html="text"></div>
@@ -21,6 +28,7 @@
   margin: 10px 0;
   padding: 15px 5px 25px;
   border-radius: 4px;
+  font-size: 0.75rem;
 
   &.selected {
     background-color: rgba(0, 0, 0, 0.1);
@@ -35,12 +43,14 @@ export default {
   name: 'Tweet',
   props: {
     text: { type: String, default: null },
+    real: { type: Boolean, default: null },
     selected: { type: Boolean, default: false },
   },
   computed: {
     ...mapState([
       'userId',
       'userName',
+      'reveal',
     ]),
   },
   filters: {
