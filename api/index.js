@@ -21,6 +21,11 @@ const port = args.length > 0 ? args[0] : 4000;
 app.get('/tweets/:id', async (req, res) => {
   let { id } = req.params;
   id = id.replace(/^@/, '').toLowerCase();
+
+  if (!id) {
+    return res.send({ userName: null, tweets: [] });
+  }
+
   const tweets = await getUserTweets(twitter, id);
   const userName = await getUserName(twitter, id);
 
