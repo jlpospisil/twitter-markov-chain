@@ -6,6 +6,11 @@ export default {
     Vue.set(state, 'reveal', !reveal);
   },
 
+  TOGGLE_SCORING(state) {
+    const { scoring } = state;
+    Vue.set(state, 'scoring', !scoring);
+  },
+
   TOGGLE_SELECTED(state, index) {
     const { tweets } = state;
     if (typeof tweets[index] !== 'undefined') {

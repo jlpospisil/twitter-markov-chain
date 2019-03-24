@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="row mb-5 justify-content-between">
+    <div class="row mb-3 justify-content-between">
       <div class="col-auto">
         <text-input class="d-inline-block" v-model="userId" placeholder="Twitter ID" />
         <button-item
@@ -12,10 +12,24 @@
       </div>
 
       <div class="col-auto">
-        <button-item class="btn-sm" type="danger" text="Reveal" @click="toggleReveal" />
-        <button-item class="btn-sm ml-2" type="success" text="Score" />
+        <!--<button-item class="btn-sm" type="danger" text="Reveal" @click="toggleReveal" />-->
+        <span class="mr-3" v-if="scoring">
+          {{ totalCorrect }} / {{ tweets.length }}
+        </span>
+
+        <button-item
+          class="btn-sm ml-2"
+          type="success"
+          text="Score"
+          :disabled="scoring || tweets.length === 0"
+          @click="toggleScoring"
+        />
       </div>
     </div>
+
+    <p class="mb-2" v-show="tweets.length > 0">
+      {{ totalReal }} of the tweets below are real, while the other {{ totalFake }} are fake.  Select the tweets that you believe are fake.  Once you think you have selected all of the fake tweets, press the score button to find out how you did!
+    </p>
 
     <tweet
       :key="`tweet-${index}`"
@@ -29,7 +43,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapGetters, mapActions } from 'vuex';
 import { TextInput, ButtonItem } from '@cdpjs/vue-components';
 import Tweet from '@/components/Tweet.vue';
 
@@ -42,37 +56,60 @@ export default {
   },
   data() {
     return {
-      userId: null,
+      userId: '@realDonaldTrump',
+      fake: 5,
+      real: 5,
     };
   },
   computed: {
     ...mapState([
       'tweets',
       'reveal',
+      'scoring',
     ]),
+
+    ...mapGetters([
+      'totalCorrect',
+    ]),
+
+    totalFake() {
+      const { tweets } = this;
+      return tweets.filter(t => !t.real).length;
+    },
+
+    totalReal() {
+      const { tweets } = this;
+      return tweets.filter(t => !!t.real).length;
+    },
   },
   methods: {
     ...mapActions([
       'generateTweets',
       'getTweetsFromTwitter',
       'toggleReveal',
+      'toggleScoring',
       'toggleSelected',
       'updateUserId',
     ]),
 
-    generate() {
-      const { getTweetsFromTwitter, generateTweets } = this;
-      getTweetsFromTwitter().then(generateTweets);
+    generateList() {
+      const { real, fake, generateTweets } = this;
+      generateTweets({ fake, real });
+    },
+
+    getTweets() {
+      const { getTweetsFromTwitter, generateList } = this;
+      getTweetsFromTwitter().then(generateList);
     },
 
     updateUserIdAndGetTweets() {
       const {
-        generate, updateUserId, userId, reveal, toggleReveal,
+        getTweets, updateUserId, userId, reveal, toggleReveal,
       } = this;
       if (reveal) {
         toggleReveal();
       }
-      updateUserId(userId).then(generate);
+      updateUserId(userId).then(getTweets);
     },
   },
 };

@@ -13,7 +13,9 @@ export default {
   },
 
   generateTweets({ commit, state, getters }, { real = 5, fake = 5 } = {}) {
-    const { twitterTweets, twitterTweetWords } = state;
+    const {
+      twitterTweets, twitterTweetWords, scoring, reveal,
+    } = state;
     const { nextWord } = getters;
     const minTweetLength = 100;
     const maxTweetLength = 150;
@@ -58,14 +60,33 @@ export default {
 
     // Update vuex store
     commit('UPDATE_TWEETS', tweets);
+
+    if (scoring) {
+      commit('TOGGLE_SCORING');
+    }
+
+    if (reveal) {
+      commit('TOGGLE_REVEAL');
+    }
   },
 
   toggleReveal({ commit }) {
     commit('TOGGLE_REVEAL');
   },
 
-  toggleSelected({ commit }, index) {
-    commit('TOGGLE_SELECTED', index);
+  toggleScoring({ commit, state }) {
+    commit('TOGGLE_SCORING');
+    const { scoring, reveal } = state;
+    if (scoring && !reveal) {
+      commit('TOGGLE_REVEAL');
+    }
+  },
+
+  toggleSelected({ commit, state }, index) {
+    const { scoring, reveal } = state;
+    if (!scoring && !reveal) {
+      commit('TOGGLE_SELECTED', index);
+    }
   },
 
   updateUserId({ commit }, userId) {

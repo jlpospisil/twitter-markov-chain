@@ -10,4 +10,9 @@ export default {
 
     return nextWords[Math.floor(Math.random() * nextWords.length)];
   },
+
+  totalCorrect: (state) => {
+    const { tweets } = state;
+    return tweets.filter(t => !!t.selected !== t.real).length;
+  },
 };
