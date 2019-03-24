@@ -28,7 +28,7 @@
     </div>
 
     <p class="mb-2" v-show="tweets.length > 0">
-      {{ totalReal }} of the tweets below are real, while the other {{ totalFake }} are fake.  Select the tweets that you believe are fake.  Once you think you have selected all of the fake tweets, press the score button to find out how you did!
+      There are {{ totalReal }} real tweets below, while the other {{ totalFake }} are fake.  Select the tweets that you believe are fake.  Once you think you have selected all of the fake tweets, press the score button to find out how you did!
     </p>
 
     <tweet
